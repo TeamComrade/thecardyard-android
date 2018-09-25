@@ -15,6 +15,5 @@ android:
   licenses:
     - "android-28 Android SDK Platform 28"
     - "27.0.3 Android SDK Build-Tools 27.0.3"
-    - ".*"
     - "*"
    
