@@ -1,0 +1,9 @@
+language: android
+
+android: 
+  components:
+    - tools
+    - platform-tools
+    
+    - android-21
+    
