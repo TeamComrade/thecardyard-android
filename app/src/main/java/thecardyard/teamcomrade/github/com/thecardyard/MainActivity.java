@@ -19,14 +19,14 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.IOException;
 
-public class imgcam extends Activity{
+public class MainActivity extends Activity{
     Button button;
     ImageView imageview;
     static final int CAM_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_imgcam);
+        setContentView(R.layout.activity_main);
         button = (Button) findViewById(R.id.button);
         imageview = (ImageView) findViewById(R.id.image_view);
         button.setOnClickListener(new View.OnClickListener() {
