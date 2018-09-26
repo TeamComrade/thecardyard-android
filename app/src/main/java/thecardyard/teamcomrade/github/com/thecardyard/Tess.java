@@ -28,10 +28,12 @@ public class Tess implements Tesseract {
         pass = Tess.init("res/raw/", "eng");
         Log.w("Tesseract", "Init:" + pass);
 
+        Tess.setImage(a);
+
         return null;
     }
     public String executeOCR(String Filename) {
-        //TODO Implement Overloaded OCR for extendable implementation
+        //TODO Implement Overloaded OCR for extendable implementationg
         return null;
     }
 
