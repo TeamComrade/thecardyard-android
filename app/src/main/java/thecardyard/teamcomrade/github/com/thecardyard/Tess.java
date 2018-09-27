@@ -16,6 +16,7 @@ https://rmtheis.github.io/tess-two/javadoc/index.html
 */
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+
 public class Tess implements Tesseract {
 
     private TessBaseAPI Tess = new TessBaseAPI();
@@ -27,6 +28,8 @@ public class Tess implements Tesseract {
         //Attempt to initialize the Tesseract instance
         pass = Tess.init("res/raw/", "eng");
         Log.w("Tesseract", "Init:" + pass);
+
+        Tess.setImage(a);
 
         return null;
     }
