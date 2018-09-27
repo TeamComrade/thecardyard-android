@@ -3,11 +3,11 @@ import android.content.res.Resources;
 import android.os.Environment;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.c
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.*;
 /*
 === Tess-Two===
 
@@ -25,11 +25,12 @@ public class Tess implements Tesseract {
     private TessBaseAPI Tess = new TessBaseAPI();
 
     public void Setup(){
-        Resources.getSystem().
 
+        copyFiletoExternalStorage(R.raw.eng,"eng.traineddata");
     }
 
     private void copyFiletoExternalStorage(int resourceId, String resourceName){
+        // https://stackoverflow.com/questions/8664468/copying-raw-file-into-sdcard
         String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/" + resourceName;
         try{
             InputStream in = Resources.getSystem().openRawResource(resourceId);
