@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +36,6 @@ public class MainActivity extends Activity{
                 Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = getFile();
                 camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-
                 if (camera_intent.resolveActivity(getPackageManager())!=null){
                     startActivityForResult(camera_intent,CAM_REQUEST);
                 }
@@ -59,7 +59,10 @@ public class MainActivity extends Activity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
-            String path = "../camera_app/cam_image.jpg";
+            File img = getFile();
+            String nw = img.getAbsolutePath();
+            Log.v("Path", nw);
+            String path = "/storage/emulated/0/camera_app/cam_image.jpg";
             imageview.setImageDrawable(Drawable.createFromPath(path));
 
         }
