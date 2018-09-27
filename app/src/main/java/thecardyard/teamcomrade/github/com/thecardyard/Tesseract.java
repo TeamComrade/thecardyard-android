@@ -3,6 +3,8 @@ import java.io.File;
 
 public interface Tesseract {
 
+    void Setup();
+
     String executeOCR(File a);
 
     String executeOCR(String Filename);

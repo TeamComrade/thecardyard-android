@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.*;
+import java.util.*;
 /*
 === Tess-Two===
 
@@ -25,13 +26,15 @@ public class Tess implements Tesseract {
     private TessBaseAPI Tess = new TessBaseAPI();
 
     public void Setup(){
-
-        copyFiletoExternalStorage(R.raw.eng,"eng.traineddata");
+        File check = new File(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/eng.traineddata");
+        if (!check.exists()) {
+            copyFiletoExternalStorage(R.raw.eng, "eng.traineddata");
+        }
     }
 
     private void copyFiletoExternalStorage(int resourceId, String resourceName){
         // https://stackoverflow.com/questions/8664468/copying-raw-file-into-sdcard
-        String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/" + resourceName;
+        String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/tessdata/" + resourceName;
         try{
             InputStream in = Resources.getSystem().openRawResource(resourceId);
             FileOutputStream out = null;
@@ -58,7 +61,7 @@ public class Tess implements Tesseract {
         boolean pass;
 
         //Attempt to initialize the Tesseract instance
-        pass = Tess.init("res/raw/", "eng");
+        pass = Tess.init(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/", "eng");
         Log.w("Tesseract", "Init:" + pass);
 
         Tess.setImage(a);
