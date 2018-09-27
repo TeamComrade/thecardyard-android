@@ -16,6 +16,7 @@ https://rmtheis.github.io/tess-two/javadoc/index.html
 */
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+
 public class Tess implements Tesseract {
 
     private TessBaseAPI Tess = new TessBaseAPI();
@@ -33,7 +34,7 @@ public class Tess implements Tesseract {
         return null;
     }
     public String executeOCR(String Filename) {
-        //TODO Implement Overloaded OCR for extendable implementationg
+        //TODO Implement Overloaded OCR for extendable implementation
         return null;
     }
 
