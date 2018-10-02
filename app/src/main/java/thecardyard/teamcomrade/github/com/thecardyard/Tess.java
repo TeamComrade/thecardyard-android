@@ -1,4 +1,5 @@
 package thecardyard.teamcomrade.github.com.thecardyard;
+//import android.content.res.Resources;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.renderscript.ScriptGroup;
@@ -28,12 +29,13 @@ public class Tess implements Tesseract {
     public void Setup(){
         File check = new File(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/eng.traineddata");
         if (!check.exists()) {
-            copyFiletoExternalStorage(R.raw.eng, "eng.traineddata");
+            copyFiletoExternalStorage((int) R.raw.eng, "eng.traineddata");
         }
     }
 
     private void copyFiletoExternalStorage(int resourceId, String resourceName){
         // https://stackoverflow.com/questions/8664468/copying-raw-file-into-sdcard
+        Log.w("Tesseract", "ResourceID: " + resourceId +" resourceName: " + resourceName);
         String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/tessdata/" + resourceName;
         try{
             InputStream in = Resources.getSystem().openRawResource(resourceId);
