@@ -59,7 +59,10 @@ public class MainActivity extends Activity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
+            Tess ts = new Tess();
+            ts.Setup();
             File img = getFile();
+            ts.executeOCR(img);
             String nw = img.getAbsolutePath();
             Log.v("Path", nw);
             String path = "/storage/emulated/0/camera_app/cam_image.jpg";
