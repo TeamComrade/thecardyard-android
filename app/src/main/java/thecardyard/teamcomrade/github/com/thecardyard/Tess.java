@@ -1,6 +1,9 @@
 package thecardyard.teamcomrade.github.com.thecardyard;
 //import android.content.res.Resources;
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
+import thecardyard.teamcomrade.github.com.thecardyard.*;
 import android.os.Environment;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
@@ -25,11 +28,14 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 public class Tess implements Tesseract {
 
     private TessBaseAPI Tess = new TessBaseAPI();
-
-    public void Setup(){
+    private Context Context;
+    public void Setup(Context context){
         File check = new File(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/eng.traineddata");
+        this.Context = context;
+
         if (!check.exists()) {
-            copyFiletoExternalStorage((int) R.raw.eng, "eng.traineddata");
+
+            copyFiletoExternalStorage(R.raw.eng, "eng.traineddata");
         }
     }
 
@@ -38,7 +44,7 @@ public class Tess implements Tesseract {
         Log.w("Tesseract", "ResourceID: " + resourceId +" resourceName: " + resourceName);
         String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/tessdata/" + resourceName;
         try{
-            InputStream in = Resources.getSystem().openRawResource(resourceId);
+            InputStream in = Context.getResources().openRawResource(resourceId);
             FileOutputStream out = null;
             out = new FileOutputStream(pathSDCard);
             byte[] buff = new byte[1024];
