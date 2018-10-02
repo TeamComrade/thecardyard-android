@@ -62,14 +62,28 @@ public class Tess implements Tesseract {
 
         //Attempt to initialize the Tesseract instance
         pass = Tess.init(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/", "eng");
-        Log.w("Tesseract", "Init:" + pass);
+        Log.w("Tesseract", "Init: " + pass);
+
+        if(!pass){
+            return null;
+        }
 
         Tess.setImage(a);
 
         return null;
     }
-    public String executeOCR(String Filename) {
+    public String executeOCR(String Filepath) {
         //TODO Implement Overloaded OCR for extendable implementation
+        boolean pass;
+        pass = Tess.init(Environment.getExternalStorageDirectory() + "/Android/data/tessdata/", "eng");
+        Log.w("Tesseract", "Init: "+ pass);
+
+        if(!pass){
+            return null;
+        }
+        File file = new File(Filepath);
+        Tess.setImage(file);
+
         return null;
     }
 
