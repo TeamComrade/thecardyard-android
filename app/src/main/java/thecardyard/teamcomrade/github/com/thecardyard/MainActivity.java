@@ -1,5 +1,6 @@
 package thecardyard.teamcomrade.github.com.thecardyard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,15 +26,19 @@ public class MainActivity extends Activity{
     Button button;
     ImageView imageview;
     static final int CAM_REQUEST = 1;
+    Activity act = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         setContentView(R.layout.activity_main);
         button = (Button) findViewById(R.id.button);
         imageview = (ImageView) findViewById(R.id.image_view);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RequestwritePerms();
                 Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = getFile();
                 camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -45,12 +51,15 @@ public class MainActivity extends Activity{
     private File getFile(){
         File folder = new File(Environment.getExternalStorageDirectory(),"camera_app");
 
+
         if(!folder.exists()){
             folder.mkdir();
         }
 
         File image_file = new File(folder,"cam_image.jpg");
 
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
 
         return image_file;
     }
@@ -60,7 +69,7 @@ public class MainActivity extends Activity{
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
             Tess ts = new Tess();
-            ts.Setup();
+            ts.Setup(this);
             File img = getFile();
             ts.executeOCR(img);
             String nw = img.getAbsolutePath();
@@ -69,6 +78,9 @@ public class MainActivity extends Activity{
             imageview.setImageDrawable(Drawable.createFromPath(path));
 
         }
+    }
+    public void RequestwritePerms(){
+        PermissionRequest.requestPermission(this.act);
     }
 
 }
