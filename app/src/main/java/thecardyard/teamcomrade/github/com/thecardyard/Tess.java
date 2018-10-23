@@ -36,6 +36,7 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 public class Tess extends ActivityCompat implements Tesseract {
 
     private TessBaseAPI Tess = new TessBaseAPI();
+    private Boolean TessInit = false;
     private Context Context;
     protected File sdCard;
     String Dir;
@@ -115,11 +116,13 @@ public class Tess extends ActivityCompat implements Tesseract {
 
     public String executeOCR(File a){
         //TODO Run this through various PSM's looking for best result
-        boolean pass;
+        boolean pass = false;
 
         //Attempt to initialize the Tesseract instance
         String datapath = Context.getFilesDir().getAbsolutePath();
-        pass = Tess.init(datapath, "eng");
+        if(!TessInit){
+            pass = Tess.init(datapath, "eng", 12);
+        }
         Log.w("Tesseract", "Init: " + pass);
 
         if(!pass){
@@ -127,9 +130,12 @@ public class Tess extends ActivityCompat implements Tesseract {
         }
 
         Tess.setImage(a);
+        String recognized = Tess.getUTF8Text();
 
+        Log.d("Tess:Detect", recognized);
         return null;
     }
+
     public String executeOCR(String Filepath) {
         //TODO Implement Overloaded OCR for extendable implementation
         boolean pass;
