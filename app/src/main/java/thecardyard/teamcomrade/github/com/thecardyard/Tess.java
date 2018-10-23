@@ -36,7 +36,9 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 public class Tess extends ActivityCompat implements Tesseract {
 
     private TessBaseAPI Tess = new TessBaseAPI();
+    private boolean TessInit = false;
     private Context Context;
+    private String CurrentRecognized;
     protected File sdCard;
     String Dir;
     protected File filedork;
@@ -115,11 +117,13 @@ public class Tess extends ActivityCompat implements Tesseract {
 
     public String executeOCR(File a){
         //TODO Run this through various PSM's looking for best result
-        boolean pass;
+        boolean pass = false;
 
         //Attempt to initialize the Tesseract instance
         String datapath = Context.getFilesDir().getAbsolutePath();
-        pass = Tess.init(datapath, "eng");
+        if(!TessInit) {
+            pass = Tess.init(datapath, "eng");
+        }
         Log.w("Tesseract", "Init: " + pass);
 
         if(!pass){
@@ -128,17 +132,19 @@ public class Tess extends ActivityCompat implements Tesseract {
 
         Tess.setImage(a);
         String recognized = Tess.getUTF8Text();
+        CurrentRecognized = recognized;
+
 
         Log.d("Tess:Detect", recognized);
-        return null;
+        return CurrentRecognized;
     }
     public String executeOCR(String Filepath) {
         //TODO Implement Overloaded OCR for extendable implementation
         boolean pass;
         pass = Tess.init(Context.getFilesDir().getAbsolutePath(), "eng");
-        Log.w("Tesseract", "Init: "+ pass);
+        Log.w("Tesseract", "Init: " + pass);
 
-        if(!pass){
+        if (!pass) {
             return null;
         }
         File file = new File(Filepath);
@@ -147,6 +153,9 @@ public class Tess extends ActivityCompat implements Tesseract {
         return null;
     }
 
+    public String getCurrentRecognized(){
+        return CurrentRecognized;
+    }
     /**
      * Free up all Memory used by Tesseract, This should be called when the App is being destroyed
      */
