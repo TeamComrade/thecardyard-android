@@ -26,10 +26,14 @@ public class MainActivity extends Activity{
     Button button;
     ImageView imageview;
     static final int CAM_REQUEST = 1;
+    private DBCommunicate db;
+    private String dbCall = "";
     Activity act = this;
+    private Context c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        c = this;
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         setContentView(R.layout.activity_main);
@@ -45,8 +49,13 @@ public class MainActivity extends Activity{
                 if (camera_intent.resolveActivity(getPackageManager())!=null){
                     startActivityForResult(camera_intent,CAM_REQUEST);
                 }
+                createNew(c);
+                db.execute();
             }
         });
+    }
+    private void createNew(Context context){
+        db = new DBCommunicate(context, dbCall);
     }
     private File getFile(){
         File folder = new File(Environment.getExternalStorageDirectory(),"camera_app");
