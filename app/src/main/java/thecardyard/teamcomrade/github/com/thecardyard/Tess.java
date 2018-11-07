@@ -1,18 +1,6 @@
 package thecardyard.teamcomrade.github.com.thecardyard;
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import thecardyard.teamcomrade.github.com.thecardyard.*;
-
-import android.os.Build;
 import android.os.Environment;
-import android.renderscript.ScriptGroup;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import java.io.File;
@@ -130,7 +118,7 @@ public class Tess extends ActivityCompat implements Tesseract {
         String recognized = Tess.getUTF8Text();
 
         Log.d("Tess:Detect", recognized);
-        return null;
+        return recognized;
     }
     public String executeOCR(String Filepath) {
         //TODO Implement Overloaded OCR for extendable implementation

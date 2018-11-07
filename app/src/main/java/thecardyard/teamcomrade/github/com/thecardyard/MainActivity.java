@@ -18,13 +18,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends Activity{
     Button button;
     ImageView imageview;
+    TextView textView;
     static final int CAM_REQUEST = 1;
     private DBCommunicate db;
     private String dbCall = "";
@@ -37,17 +41,16 @@ public class MainActivity extends Activity{
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         setContentView(R.layout.activity_main);
-        button = (Button) findViewById(R.id.button);
-        imageview = (ImageView) findViewById(R.id.image_view);
+        button = findViewById(R.id.button);
+        imageview = findViewById(R.id.image_view);
+        textView = findViewById(R.id.tessdata);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RequestwritePerms();
-                Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = getFile();
-                camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                if (camera_intent.resolveActivity(getPackageManager())!=null){
-                    startActivityForResult(camera_intent,CAM_REQUEST);
+                Intent Picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (Picture.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(Picture, CAM_REQUEST);
                 }
                 createNew(c);
                 db.execute();
@@ -57,34 +60,33 @@ public class MainActivity extends Activity{
     private void createNew(Context context){
         db = new DBCommunicate(context, dbCall);
     }
-    private File getFile(){
-        File folder = new File(Environment.getExternalStorageDirectory(),"camera_app");
-
-
-        if(!folder.exists()){
-            folder.mkdir();
-        }
-
-        File image_file = new File(folder,"cam_image.jpg");
-
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-
-        return image_file;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
-            Tess ts = new Tess();
-            ts.Setup(this);
-            File img = getFile();
-            ts.executeOCR(img);
-            String nw = img.getAbsolutePath();
-            Log.v("Path", nw);
-            String path = "/storage/emulated/0/camera_app/cam_image.jpg";
-            imageview.setImageDrawable(Drawable.createFromPath(path));
+
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            File f = new File(this.getCacheDir(),"image");
+            try{
+                f.createNewFile();
+                FileOutputStream fos = new FileOutputStream(f);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, bytes);
+                fos.write(bytes.toByteArray());
+                fos.flush();
+                fos.close();
+                Tess ts = new Tess();
+                ts.Setup(this);
+                textView.setText(ts.executeOCR(f));
+                //ts.executeOCR(f);
+                imageview.setImageBitmap(imageBitmap);
+            }catch(IOException | NullPointerException e){
+                Log.v("Errors",e.toString());
+            }
+
+
 
         }
     }
